@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "S03-WF2: Test Project"
+name: "S03-WF2: Deploy Project"
 
 on: push
 
@@ -17,3 +17,19 @@ jobs:
       - name: Run Tests
         working-directory: ./section-02
         run: npm test
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+      - name: Install Dependencies
+        working-directory: ./section-02
+        run: npm ci
+      - name: Run Build
+        working-directory: ./section-02
+        run: npm run build
+      - name: Deploy
+        working-directory: ./section-02
+        run: echo Deploying...
