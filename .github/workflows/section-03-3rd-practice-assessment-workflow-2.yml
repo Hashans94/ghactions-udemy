@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "S03-WF3: Deploy Project"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Event Details
+        run: echo "${{ toJson(github) }}"
