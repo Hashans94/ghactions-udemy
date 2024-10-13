@@ -6,8 +6,8 @@ on:
     types: [opened]
 
 jobs:
-  lint:
+  log-event:
     runs-on: ubuntu-latest
     steps:
-      - name: Event Details
-        run: echo "${{ toJson(github) }}"
+      - name: Log Event
+        run: echo "${{ toJson(github.event.issue) }}"
