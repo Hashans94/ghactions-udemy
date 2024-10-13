@@ -1,10 +1,15 @@
-name: Events Demo 1
+name: "S04-WF1: Activity Types"
+
 on:
   pull_request:
     types:
       - opened
   push:
   workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./section-04-start
 
 jobs:
   deploy:
