@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./section-04-start
+    working-directory: section-04-start
 
 jobs:
   deploy:
