@@ -11,10 +11,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci
+        working-directory: ./section-05
       - name: Lint code
         run: npm run lint
+        working-directory: ./section-05
       - name: Test code
         run: npm run test
+        working-directory: ./section-05
 
   build:
     needs: test
@@ -24,15 +27,17 @@ jobs:
         uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci
+        working-directory: ./section-05
       - name: Build website
         run: npm run build
+        working-directory: ./section-05
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: dist-files
           path: |
-            dist
-            package.json
+            section-05/dist
+            section-05/package.json
 
   deploy:
     needs: build
