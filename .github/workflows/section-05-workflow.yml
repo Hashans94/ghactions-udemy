@@ -7,6 +7,7 @@ on:
 
 env:
   S5_DIST_ARTIFACT_NAME: dist-files
+  S5_JS_FILE_ID: script-file
 
 jobs:
   test:
@@ -26,6 +27,8 @@ jobs:
 
   build:
     needs: test
+    outputs:
+      js_file: ${{ steps.publish.outputs }}${{ env.S5_JS_FILE_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -36,10 +39,14 @@ jobs:
       - name: Build website
         run: npm run build
         working-directory: ./section-05
+      - name: Publish JS file
+        id: publish
+        working-directory: ./section-05
+        run: find dist/assets/*.js -type f -execdir echo '${{env.S5_JS_FILE_ID}}={}' >> $GITHUB_OUTPUT ';'
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{env.S5_DIST_ARTIFACT_NAME}}
+          name: ${{ env.S5_DIST_ARTIFACT_NAME }}
           path: |
             section-05/dist
             section-05/package.json
