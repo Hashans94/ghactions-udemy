@@ -1,8 +1,13 @@
 name: Deploy website
+
 on:
   push:
     branches:
       - main
+
+env:
+  S5_DIST_ARTIFACT_NAME: dist-files
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,7 +39,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: dist-files
+          name: ${{env.S5_DIST_ARTIFACT_NAME}}
           path: |
             section-05/dist
             section-05/package.json
@@ -46,7 +51,7 @@ jobs:
       - name: Get Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: dist-file
+          name: ${{env.S5_DIST_ARTIFACT_NAME}}
       - name: List Files
         run: ls -la
       - name: Deploy
