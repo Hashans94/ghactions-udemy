@@ -28,7 +28,7 @@ jobs:
   build:
     needs: test
     outputs:
-      js_file: ${{ steps.publish.outputs }}${{ env.S5_JS_FILE_ID }}
+      js_file: ${{ steps.publish.outputs.script-file }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
