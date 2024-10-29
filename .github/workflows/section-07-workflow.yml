@@ -1,0 +1,81 @@
+name: SECTION 07 - Website Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('./section-07/**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./section-07
+      - name: Lint code
+        run: npm run lint
+        working-directory: ./section-07
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('./section-07/**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./section-07
+      - name: Test code
+        run: npm run test
+        working-directory: ./section-07
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: ./section-07/test.json
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('./section-07**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./section-07
+      - name: Build website
+        id: build-website
+        run: npm run build
+        working-directory: ./section-07
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: ./section-07/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-files
+      - name: Output contents
+        run: ls
+      - name: Deploy
+        run: echo "Deploying..."
