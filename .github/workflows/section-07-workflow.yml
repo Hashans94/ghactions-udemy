@@ -36,9 +36,11 @@ jobs:
         run: npm ci
         working-directory: ./section-07
       - name: Test code
+        id: test-code
         run: npm run test
         working-directory: ./section-07
       - name: Upload test report
+        if: failure() && steps.test-code.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: test-report
